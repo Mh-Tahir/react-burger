@@ -1,0 +1,41 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  max-width: 600px;
+  height: 912px;
+}
+
+.ingredients {
+  display: flex;
+  flex-direction: column;
+  overflow-y: scroll;
+}
+
+.flex {
+  display: flex;
+}
+
+.element {
+  list-style-type: none;
+  display: flex;
+  flex-direction: column;
+  width: 272px;
+  height: 200px;
+  position: relative;
+}
+
+.list {
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.price {
+  display: flex;
+  justify-content: center;
+}
+
+.name {
+  text-align: center;
+}

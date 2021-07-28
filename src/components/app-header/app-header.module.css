@@ -1,0 +1,33 @@
+.header {
+  background: #1c1c21;
+}
+
+.container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1280px;
+  margin: auto;
+}
+
+.logomenu {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 787px;
+}
+
+.menu {
+  display: flex;
+  justify-content: center;
+}
+
+.btn {
+  display: flex;
+  justify-content: center;
+  text-decoration: none;
+}
+
+a:-webkit-any-link {
+  color: inherit;
+}
