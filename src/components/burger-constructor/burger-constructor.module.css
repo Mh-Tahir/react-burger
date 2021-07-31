@@ -1,0 +1,46 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  max-width: 600px;
+  height: 912px;
+}
+
+.locked {
+  display: flex;
+  flex-direction: column;
+  margin-top: 100px;
+}
+
+.ingredients {
+  display: flex;
+  flex-direction: column;
+  overflow-y: scroll;
+  height: 480px;
+}
+
+.element {
+  list-style-type: none;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.list {
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.flex {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.order {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
