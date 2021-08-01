@@ -2,8 +2,10 @@ import React from "react";
 import styles from "./burger-constructor.module.css";
 import { ConstructorElement, DragIcon, CurrencyIcon, Button } from "@ya.praktikum/react-developer-burger-ui-components";
 import PropTypes from "prop-types";
+import { ingredientItemPropTypes } from "../../utils/constants";
+import { data } from "../../utils/data";
 
-const BurgerConstructor = ({ data }) => {
+const BurgerConstructor = ({ openWindow }) => {
   return (
     <section className={styles.container}>
       <div className={styles.locked}>
@@ -19,9 +21,9 @@ const BurgerConstructor = ({ data }) => {
           </li>
           <div className={styles.ingredients}>
             <ul className={styles.list}>
-              {data.map((e) =>
+              {data.map((e, i) =>
                 e.type !== "bun" ? (
-                  <li className={styles.element + " mb-4 mr-2 ml-4"} key={e._id}>
+                  <li className={styles.element + " mb-4 mr-2 ml-4"} key={i}>
                     <DragIcon type="primary" />
                     <ConstructorElement text={e.name} price={e.price} thumbnail={e.image} />
                   </li>
@@ -47,7 +49,7 @@ const BurgerConstructor = ({ data }) => {
           </p>
           <CurrencyIcon type="primary" />
         </div>
-        <Button type="primary" size="large">
+        <Button type="primary" size="large" onClick={openWindow}>
           Оформить заказ
         </Button>
       </div>
@@ -56,22 +58,8 @@ const BurgerConstructor = ({ data }) => {
 };
 
 BurgerConstructor.propTypes = {
-  data: PropTypes.arrayOf(
-    PropTypes.shape({
-      _id: PropTypes.string.isRequired,
-      name: PropTypes.string.isRequired,
-      type: PropTypes.string.isRequired,
-      proteins: PropTypes.number.isRequired,
-      fat: PropTypes.number.isRequired,
-      carbohydrates: PropTypes.number.isRequired,
-      calories: PropTypes.number.isRequired,
-      price: PropTypes.number.isRequired,
-      image: PropTypes.string.isRequired,
-      image_mobile: PropTypes.string.isRequired,
-      image_large: PropTypes.string.isRequired,
-      __v: PropTypes.number.isRequired,
-    })
-  ),
+  data: PropTypes.arrayOf(ingredientItemPropTypes.isRequired).isRequired,
+  openWindow: PropTypes.func.isRequired,
 };
 
 export default BurgerConstructor;
