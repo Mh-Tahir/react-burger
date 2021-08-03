@@ -35,7 +35,7 @@ const IngredientDetails = ({ data, onClose }) => {
 };
 
 IngredientDetails.propTypes = {
-  data: PropTypes.arrayOf(ingredientItemPropTypes.isRequired).isRequired,
+  data: ingredientItemPropTypes.isRequired,
   onClose: PropTypes.func.isRequired,
 };
 

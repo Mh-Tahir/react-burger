@@ -42,7 +42,7 @@ const App = () => {
       <AppHeader />
       <main className={styles.container}>
         <BurgerIngredients data={data} openWindow={openIngredientDetails} />
-        <BurgerConstructor openWindow={openOrderDetails} />
+        <BurgerConstructor data={data} openWindow={openOrderDetails} />
       </main>
       {isIngredientDetailsOpen && (
         <Modal onClose={() => setIngredientDetailsOpen(false)}>

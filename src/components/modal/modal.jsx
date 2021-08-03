@@ -9,9 +9,10 @@ const modalRoot = document.getElementById("modal");
 
 const Modal = ({ children, onClose }) => {
   React.useEffect(() => {
-    window.addEventListener("keydown", (e) => (e.code === "Escape" ? onClose() : null));
+    const handler = (e) => (e.code === "Escape" ? onClose() : null);
+    window.addEventListener("keydown", handler);
     return () => {
-      window.removeEventListener("keydown", (e) => (e.code === "Escape" ? onClose() : null));
+      window.removeEventListener("keydown", handler);
     };
   }, [onClose]);
 
