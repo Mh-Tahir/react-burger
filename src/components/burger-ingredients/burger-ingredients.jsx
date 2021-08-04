@@ -2,8 +2,9 @@ import React from "react";
 import styles from "./burger-ingredients.module.css";
 import { Tab, Counter, CurrencyIcon } from "@ya.praktikum/react-developer-burger-ui-components";
 import PropTypes from "prop-types";
+import { ingredientItemPropTypes } from "../../utils/constants";
 
-const BurgerIngredients = ({ data }) => {
+const BurgerIngredients = ({ data, openWindow }) => {
   const [current, setCurrent] = React.useState("bun");
   return (
     <section className={styles.container}>
@@ -25,7 +26,7 @@ const BurgerIngredients = ({ data }) => {
           {data.map(
             (e) =>
               e.type === "bun" && (
-                <li className={styles.element + " ml-4 mr-2"} key={e._id}>
+                <li className={styles.element + " ml-4 mr-2"} key={e._id} onClick={() => openWindow(e)}>
                   <Counter count={1} size="default" />
                   <img src={e.image} alt={e.name} className="pl-4 pr-4" width="240" />
                   <div className={styles.price + " mt-1 mb-1"}>
@@ -42,7 +43,7 @@ const BurgerIngredients = ({ data }) => {
           {data.map(
             (e) =>
               e.type === "sauce" && (
-                <li className={styles.element + " ml-4 mr-2"} key={e._id}>
+                <li className={styles.element + " ml-4 mr-2"} key={e._id} onClick={() => openWindow(e)}>
                   <Counter count={1} size="default" />
                   <img src={e.image} alt={e.name} className="pl-4 pr-4" width="240" />
                   <div className={styles.price + " mt-1 mb-1"}>
@@ -59,7 +60,7 @@ const BurgerIngredients = ({ data }) => {
           {data.map(
             (e) =>
               e.type === "main" && (
-                <li className={styles.element + " ml-4 mr-2"} key={e._id}>
+                <li className={styles.element + " ml-4 mr-2"} key={e._id} onClick={() => openWindow(e)}>
                   <Counter count={1} size="default" />
                   <img src={e.image} alt={e.name} className="pl-4 pr-4" width="240" />
                   <div className={styles.price + " mt-1 mb-1"}>
@@ -77,22 +78,8 @@ const BurgerIngredients = ({ data }) => {
 };
 
 BurgerIngredients.propTypes = {
-  data: PropTypes.arrayOf(
-    PropTypes.shape({
-      _id: PropTypes.string.isRequired,
-      name: PropTypes.string.isRequired,
-      type: PropTypes.string.isRequired,
-      proteins: PropTypes.number.isRequired,
-      fat: PropTypes.number.isRequired,
-      carbohydrates: PropTypes.number.isRequired,
-      calories: PropTypes.number.isRequired,
-      price: PropTypes.number.isRequired,
-      image: PropTypes.string.isRequired,
-      image_mobile: PropTypes.string.isRequired,
-      image_large: PropTypes.string.isRequired,
-      __v: PropTypes.number.isRequired,
-    })
-  ),
+  data: PropTypes.arrayOf(ingredientItemPropTypes.isRequired).isRequired,
+  openWindow: PropTypes.func.isRequired,
 };
 
 export default BurgerIngredients;

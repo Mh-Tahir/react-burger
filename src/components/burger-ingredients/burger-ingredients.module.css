@@ -22,6 +22,7 @@
   width: 272px;
   height: 200px;
   position: relative;
+  cursor: pointer;
 }
 
 .list {
