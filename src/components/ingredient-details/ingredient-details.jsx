@@ -1,10 +1,10 @@
 import React from "react";
 import styles from "./ingredient-details.module.css";
-import {} from "@ya.praktikum/react-developer-burger-ui-components";
+import { useSelector } from "react-redux";
 import PropTypes from "prop-types";
-import { ingredientItemPropTypes } from "../../utils/constants";
 
-const IngredientDetails = ({ data, onClose }) => {
+const IngredientDetails = ({ onClose }) => {
+  const data = useSelector((store) => store.ingredients.element);
   return (
     <div className={styles.container + " pt-10 pr-10 pb-10 pl-10"} onClick={onClose}>
       <p className="text text_type_main-large mt-3 mb-3">Детали ингредиента</p>
@@ -35,7 +35,6 @@ const IngredientDetails = ({ data, onClose }) => {
 };
 
 IngredientDetails.propTypes = {
-  data: ingredientItemPropTypes.isRequired,
   onClose: PropTypes.func.isRequired,
 };
 
