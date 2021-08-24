@@ -113,7 +113,7 @@ const BurgerConstructor = ({ openWindow }) => {
           </p>
           <CurrencyIcon type="primary" />
         </div>
-        <Button type="primary" size="large" onClick={elements.length ? formOrder : null}>
+        <Button type="primary" size="large" onClick={elements.find((e) => e.type === "bun") ? formOrder : null}>
           Оформить заказ
         </Button>
       </div>
