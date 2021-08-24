@@ -1,75 +1,70 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styles from "./burger-ingredients.module.css";
-import { Tab, Counter, CurrencyIcon } from "@ya.praktikum/react-developer-burger-ui-components";
+import { Tab } from "@ya.praktikum/react-developer-burger-ui-components";
+import { useSelector } from "react-redux";
 import PropTypes from "prop-types";
-import { ingredientItemPropTypes } from "../../utils/constants";
+import { BurgerIngredientsElement } from "./burger-ingredients-element";
 
-const BurgerIngredients = ({ data, openWindow }) => {
-  const [current, setCurrent] = React.useState("bun");
+const BurgerIngredients = ({ openWindow }) => {
+  const [current, setCurrent] = useState("bun");
+  const { ingredients } = useSelector((store) => store.ingredients);
+
+  useEffect(() => {
+    const container = document.querySelector("[class^='burger-ingredients_ingredients']");
+    function scrollBurgerIngredients() {
+      const height = container.scrollTop;
+      if (height >= 0 && height < 294) {
+        setCurrent("bun");
+      } else if (height >= 294 && height < 788) {
+        setCurrent("sauce");
+      } else {
+        setCurrent("main");
+      }
+    }
+    container.addEventListener("scroll", scrollBurgerIngredients);
+    return () => {
+      container.removeEventListener("scroll", scrollBurgerIngredients);
+    };
+  }, []);
+
+  const tabClick = (tab) => {
+    setCurrent(tab);
+    const container = document.querySelector("[class^='burger-ingredients_ingredients']");
+    const heights = { bun: 0, sauce: 295, main: 788 };
+    container.scrollTop = heights[`${tab}`];
+  };
+
   return (
     <section className={styles.container}>
       <p className="mt-10 mb-5 text text_type_main-large">Соберите бургер</p>
       <nav className={styles.flex}>
-        <Tab value="bun" active={current === "bun"} onClick={() => setCurrent("bun")}>
+        <Tab value="bun" active={current === "bun"} onClick={() => tabClick("bun")}>
           Булки
         </Tab>
-        <Tab value="sauce" active={current === "sauce"} onClick={() => setCurrent("sauce")}>
+        <Tab value="sauce" active={current === "sauce"} onClick={() => tabClick("sauce")}>
           Соусы
         </Tab>
-        <Tab value="main" active={current === "main"} onClick={() => setCurrent("main")}>
+        <Tab value="main" active={current === "main"} onClick={() => tabClick("main")}>
           Начинки
         </Tab>
       </nav>
       <div className={styles.ingredients}>
         <p className="mt-10 mb-6 text text_type_main-medium">Булки</p>
         <ul className={styles.list}>
-          {data.map(
-            (e) =>
-              e.type === "bun" && (
-                <li className={styles.element + " ml-4 mr-2"} key={e._id} onClick={() => openWindow(e)}>
-                  <Counter count={1} size="default" />
-                  <img src={e.image} alt={e.name} className="pl-4 pr-4" width="240" />
-                  <div className={styles.price + " mt-1 mb-1"}>
-                    <p className="pr-1 text text_type_digits-default">{e.price}</p>
-                    <CurrencyIcon type="primary" />
-                  </div>
-                  <p className={styles.name + " text text_type_main-small"}>{e.name}</p>
-                </li>
-              )
+          {ingredients.map(
+            (e) => e.type === "bun" && <BurgerIngredientsElement openWindow={openWindow} e={e} key={e._id} />
           )}
         </ul>
         <p className="mt-10 mb-6 text text_type_main-medium">Соусы</p>
         <ul className={styles.list}>
-          {data.map(
-            (e) =>
-              e.type === "sauce" && (
-                <li className={styles.element + " ml-4 mr-2"} key={e._id} onClick={() => openWindow(e)}>
-                  <Counter count={1} size="default" />
-                  <img src={e.image} alt={e.name} className="pl-4 pr-4" width="240" />
-                  <div className={styles.price + " mt-1 mb-1"}>
-                    <p className="pr-1 text text_type_digits-default">{e.price}</p>
-                    <CurrencyIcon type="primary" />
-                  </div>
-                  <p className={styles.name + " text text_type_main-small"}>{e.name}</p>
-                </li>
-              )
+          {ingredients.map(
+            (e) => e.type === "sauce" && <BurgerIngredientsElement openWindow={openWindow} e={e} key={e._id} />
           )}
         </ul>
         <p className="mt-10 mb-6 text text_type_main-medium">Начинка</p>
         <ul className={styles.list}>
-          {data.map(
-            (e) =>
-              e.type === "main" && (
-                <li className={styles.element + " ml-4 mr-2"} key={e._id} onClick={() => openWindow(e)}>
-                  <Counter count={1} size="default" />
-                  <img src={e.image} alt={e.name} className="pl-4 pr-4" width="240" />
-                  <div className={styles.price + " mt-1 mb-1"}>
-                    <p className="pr-1 text text_type_digits-default">{e.price}</p>
-                    <CurrencyIcon type="primary" />
-                  </div>
-                  <p className={styles.name + " text text_type_main-small"}>{e.name}</p>
-                </li>
-              )
+          {ingredients.map(
+            (e) => e.type === "main" && <BurgerIngredientsElement openWindow={openWindow} e={e} key={e._id} />
           )}
         </ul>
       </div>
@@ -78,7 +73,6 @@ const BurgerIngredients = ({ data, openWindow }) => {
 };
 
 BurgerIngredients.propTypes = {
-  data: PropTypes.arrayOf(ingredientItemPropTypes.isRequired).isRequired,
   openWindow: PropTypes.func.isRequired,
 };
 

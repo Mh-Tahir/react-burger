@@ -1,17 +1,66 @@
-import React from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import styles from "./burger-constructor.module.css";
-import { ConstructorElement, DragIcon, CurrencyIcon, Button } from "@ya.praktikum/react-developer-burger-ui-components";
+import { ConstructorElement, CurrencyIcon, Button } from "@ya.praktikum/react-developer-burger-ui-components";
+import { useSelector, useDispatch } from "react-redux";
+import { useDrop } from "react-dnd";
 import PropTypes from "prop-types";
-import { ingredientItemPropTypes } from "../../utils/constants";
+import { getOrderData } from "../../services/actions";
+import { BurgerConstructorElement } from "./burger-constructor-element";
+import { DELETE_ELEMENT, ADD_ELEMENT, MOVE_ELEMENT } from "../../services/actions";
+import update from "immutability-helper";
 
-const BurgerConstructor = ({ data, openWindow }) => {
+const BurgerConstructor = ({ openWindow }) => {
+  const dispatch = useDispatch();
+  const elements = useSelector((store) => store.order.elements);
+  const [cards, setCards] = useState(elements);
+
+  useEffect(() => {
+    setCards(elements);
+  }, [elements]);
+
+  const formOrder = () => {
+    openWindow();
+    dispatch(getOrderData(elements));
+  };
+  const deleteElement = (e) => {
+    dispatch({ type: DELETE_ELEMENT, id: e._id });
+  };
+  const [, dropTarget] = useDrop({
+    accept: "e",
+    drop(element) {
+      dispatch({ type: ADD_ELEMENT, element: element });
+    },
+  });
+  const [, dropTargetInOrder] = useDrop({
+    accept: "inOrder",
+    drop(element) {
+      dispatch({
+        type: MOVE_ELEMENT,
+        cards: cards,
+      });
+    },
+  });
+  const moveCard = useCallback(
+    (dragIndex, hoverIndex) => {
+      const dragCard = cards[dragIndex];
+      setCards(
+        update(cards, {
+          $splice: [
+            [dragIndex, 1],
+            [hoverIndex, 0, dragCard],
+          ],
+        })
+      );
+    },
+    [cards]
+  );
   return (
     <section className={styles.container}>
-      <div className={styles.locked}>
+      <div ref={dropTarget} className={styles.locked}>
         <ul className={styles.list}>
-          {data.map(
+          {elements.map(
             (e) =>
-              e.name === "Краторная булка N-200i" && (
+              e.type === "bun" && (
                 <li className={styles.element + " mb-4 mr-2 ml-4 pl-8"} key={e._id + "1"}>
                   <ConstructorElement
                     type="top"
@@ -23,21 +72,26 @@ const BurgerConstructor = ({ data, openWindow }) => {
                 </li>
               )
           )}
-          <div className={styles.ingredients}>
+          <div ref={dropTargetInOrder} className={styles.ingredients}>
             <ul className={styles.list}>
-              {data.map((e, i) =>
+              {!elements.length && <li className={styles.space + " text text_type_main-large"}></li>}
+              {elements.map((e, i) =>
                 e.type !== "bun" ? (
-                  <li className={styles.element + " mb-4 mr-2 ml-4"} key={i}>
-                    <DragIcon type="primary" />
-                    <ConstructorElement text={e.name} price={e.price} thumbnail={e.image} />
-                  </li>
+                  <BurgerConstructorElement
+                    key={i}
+                    e={e}
+                    onClose={() => deleteElement(e)}
+                    index={i}
+                    id={e._id}
+                    moveCard={moveCard}
+                  />
                 ) : null
               )}
             </ul>
           </div>
-          {data.map(
+          {elements.map(
             (e) =>
-              e.name === "Краторная булка N-200i" && (
+              e.type === "bun" && (
                 <li className={styles.element + " mr-2 ml-4 pl-8"} key={e._id + "2"}>
                   <ConstructorElement
                     type="bottom"
@@ -54,11 +108,12 @@ const BurgerConstructor = ({ data, openWindow }) => {
       <div className={styles.order + " pt-10 pr-4 pl-4"}>
         <div className={styles.flex + " mr-10"}>
           <p className="pr-2 text text_type_digits-medium">
-            {data.filter((e) => e.type !== "bun").reduce((sum, e) => sum + e.price, 1255 * 2)}
+            {elements.filter((e) => e.type !== "bun").reduce((sum, e) => sum + e.price, 0) +
+              elements.filter((e) => e.type === "bun").reduce((sum, e) => sum + e.price * 2, 0)}
           </p>
           <CurrencyIcon type="primary" />
         </div>
-        <Button type="primary" size="large" onClick={openWindow}>
+        <Button type="primary" size="large" onClick={elements.find((e) => e.type === "bun") ? formOrder : null}>
           Оформить заказ
         </Button>
       </div>
@@ -67,7 +122,6 @@ const BurgerConstructor = ({ data, openWindow }) => {
 };
 
 BurgerConstructor.propTypes = {
-  data: PropTypes.arrayOf(ingredientItemPropTypes.isRequired).isRequired,
   openWindow: PropTypes.func.isRequired,
 };
 

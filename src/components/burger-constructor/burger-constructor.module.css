@@ -16,6 +16,7 @@
   flex-direction: column;
   overflow-y: scroll;
   height: 480px;
+  width: 580px;
 }
 
 .element {
@@ -43,4 +44,19 @@
   display: flex;
   justify-content: flex-end;
   align-items: center;
+}
+
+.space {
+  width: 580px;
+  height: 476px;
+  list-style-type: none;
+  composes: flex;
+}
+
+.space:hover {
+  border: 2px solid #4c4cff;
+}
+
+.space:hover::after {
+  content: "Добавьте ингридиенты";
 }
