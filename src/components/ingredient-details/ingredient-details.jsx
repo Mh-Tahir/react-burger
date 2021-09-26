@@ -1,13 +1,16 @@
 import React from "react";
 import styles from "./ingredient-details.module.css";
 import { useSelector } from "react-redux";
-import PropTypes from "prop-types";
+import { useParams } from "react-router-dom";
 
-const IngredientDetails = ({ onClose }) => {
-  const data = useSelector((store) => store.ingredients.element);
+const IngredientDetails = () => {
+  const { id } = useParams();
+  let data = useSelector((store) => store.ingredients.element);
+  const dataId = useSelector((store) => store.ingredients.ingredients).find((e) => e._id === id);
+  data = dataId || data;
   return (
-    <div className={styles.container + " pt-10 pr-10 pb-10 pl-10"} onClick={onClose}>
-      <p className="text text_type_main-large mt-3 mb-3">Детали ингредиента</p>
+    <div className={styles.container + " pt-10 pr-10 pb-10 pl-10"}>
+      <p className={styles.flex + " text text_type_main-large mt-3 mb-3"}>Детали ингредиента</p>
       <div className={styles.flex}>
         <img src={data.image_large} alt={data.name} />
         <p className="text text_type_main-medium mt-4 mb-8">{data.name}</p>
@@ -32,10 +35,6 @@ const IngredientDetails = ({ onClose }) => {
       </div>
     </div>
   );
-};
-
-IngredientDetails.propTypes = {
-  onClose: PropTypes.func.isRequired,
 };
 
 export default IngredientDetails;

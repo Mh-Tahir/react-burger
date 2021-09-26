@@ -1,63 +1,67 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import styles from "./app.module.css";
 import AppHeader from "../app-header/app-header.jsx";
-import BurgerIngredients from "../burger-ingredients/burger-ingredients";
-import BurgerConstructor from "../burger-constructor/burger-constructor";
 import IngredientDetails from "../ingredient-details/ingredient-details";
-import OrderDetails from "../order-details/order-details";
 import Modal from "../modal/modal";
 import { useDispatch } from "react-redux";
-import { HTML5Backend } from "react-dnd-html5-backend";
-import { DndProvider } from "react-dnd";
 import { getData } from "../../services/actions";
-import { SET_ELEMENT, DELETE_ORDER } from "../../services/actions";
+import Main from "../pages/main";
+import Profile from "../pages/profile";
+import Login from "../pages/login";
+import Register from "../pages/register";
+import ForgotPassword from "../pages/forgot-password";
+import ResetPassword from "../pages/reset-password";
+import Error404 from "../pages/error-404";
+import { Route, Switch, useHistory, useLocation } from "react-router-dom";
+import ProtectedRoute from "../protected-route";
+import LoginProtectedRoute from "../protected-route/login-protected";
 
 const App = () => {
-  const [isIngredientDetailsOpen, setIngredientDetailsOpen] = useState(false);
-  const [isOrderDetailsOpen, setOrderDetailsOpen] = useState(false);
+  const location = useLocation();
+  const history = useHistory();
   const dispatch = useDispatch();
+  let background =
+    (history.action === "PUSH" || history.action === "REPLACE") && location.state && location.state.background;
 
   useEffect(() => {
     dispatch(getData());
   }, [dispatch]);
 
-  const openIngredientDetails = (e) => {
-    setIngredientDetailsOpen(!isIngredientDetailsOpen);
-    dispatch({ type: SET_ELEMENT, element: e });
-  };
-
-  const openOrderDetails = () => {
-    setOrderDetailsOpen(!isOrderDetailsOpen);
-  };
-
-  const closeIngredientModal = () => {
-    dispatch({ type: SET_ELEMENT, element: {} });
-    setIngredientDetailsOpen(false);
-  };
-
-  const closeOrderModal = () => {
-    dispatch({ type: DELETE_ORDER });
-    setOrderDetailsOpen(false);
-  };
-
   return (
     <>
       <AppHeader />
-      <main className={styles.container}>
-        <DndProvider backend={HTML5Backend}>
-          <BurgerIngredients openWindow={openIngredientDetails} />
-          <BurgerConstructor openWindow={openOrderDetails} />
-        </DndProvider>
-      </main>
-      {isIngredientDetailsOpen && (
-        <Modal onClose={() => closeIngredientModal()}>
-          <IngredientDetails onClose={setIngredientDetailsOpen} />
-        </Modal>
-      )}
-      {isOrderDetailsOpen && (
-        <Modal onClose={() => closeOrderModal()}>
-          <OrderDetails onClose={setOrderDetailsOpen} />
-        </Modal>
+      <Switch location={background || location}>
+        <Route path="/" exact>
+          <Main />
+        </Route>
+        <LoginProtectedRoute path="/register" exact>
+          <Register />
+        </LoginProtectedRoute>
+        <LoginProtectedRoute path="/login" exact>
+          <Login />
+        </LoginProtectedRoute>
+        <Route path="/ingredients/:id" exact>
+          <IngredientDetails />
+        </Route>
+        <LoginProtectedRoute path="/reset-password" exact>
+          <ResetPassword />
+        </LoginProtectedRoute>
+        <ProtectedRoute path="/profile" exact>
+          <Profile />
+        </ProtectedRoute>
+        <LoginProtectedRoute path="/forgot-password" exact>
+          <ForgotPassword />
+        </LoginProtectedRoute>
+        <Route>
+          <Error404 />
+        </Route>
+      </Switch>
+      {background && (
+        <Route path="/ingredients/:id">
+          <Modal onClose={() => history.goBack()}>
+            <IngredientDetails />
+          </Modal>
+        </Route>
       )}
     </>
   );

@@ -1,0 +1,15 @@
+.flex {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.input > div > div {
+  width: 480px;
+}
+
+.flex a {
+  text-decoration: none;
+  color: #4c4cff;
+}

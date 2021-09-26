@@ -1,0 +1,25 @@
+.flex {
+  display: flex;
+}
+
+.aside {
+  width: 320px;
+}
+
+.link {
+  height: 64px;
+  line-height: 64px;
+  cursor: pointer;
+}
+
+.inputs > div > div {
+  width: 480px;
+}
+
+.info {
+  color: rgba(133, 133, 173, 0.4);
+}
+
+a {
+  text-decoration: none;
+}
