@@ -17,7 +17,7 @@ const Login = () => {
     const result = await signIn(email, password);
     if (result.success) {
       dispatch({ type: SIGN_IN });
-      history.push("/profile");
+      history.replace((history.location.state && history.location.state.from.pathname) || "/");
     } else {
       console.log(result.message);
     }

@@ -7,6 +7,7 @@ const AppHeader = () => {
   const mainMatch = useRouteMatch("/");
   const ordersMatch = useRouteMatch("/orders");
   const profileMatch = useRouteMatch("/profile");
+  const ordersHistoryMatch = useRouteMatch("/profile/orders");
   const current = (match) => (match ? match.isExact : false);
   return (
     <header className={styles.header}>
@@ -31,8 +32,12 @@ const AppHeader = () => {
           </Link>
         </div>
         <Link to="/profile" className={styles.btn + " p-5 mt-4 mb-4"}>
-          <ProfileIcon type={current(profileMatch) ? "primary" : "secondary"} />
-          <p className={`pl-2 text text_type_main-default  + ${current(profileMatch) ? "" : "text_color_inactive"}`}>
+          <ProfileIcon type={current(profileMatch) || current(ordersHistoryMatch) ? "primary" : "secondary"} />
+          <p
+            className={`pl-2 text text_type_main-default  + ${
+              current(profileMatch) || current(ordersHistoryMatch) ? "" : "text_color_inactive"
+            }`}
+          >
             Личный кабинет
           </p>
         </Link>

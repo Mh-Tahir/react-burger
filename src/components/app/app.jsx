@@ -12,9 +12,12 @@ import Register from "../pages/register";
 import ForgotPassword from "../pages/forgot-password";
 import ResetPassword from "../pages/reset-password";
 import Error404 from "../pages/error-404";
+import Orders from "../pages/orders";
+import Order from "../pages/order";
 import { Route, Switch, useHistory, useLocation } from "react-router-dom";
 import ProtectedRoute from "../protected-route";
 import LoginProtectedRoute from "../protected-route/login-protected";
+import { SIGN_IN } from "../../services/actions";
 
 const App = () => {
   const location = useLocation();
@@ -22,10 +25,14 @@ const App = () => {
   const dispatch = useDispatch();
   let background =
     (history.action === "PUSH" || history.action === "REPLACE") && location.state && location.state.background;
+  const signIn = localStorage.getItem("refreshToken");
 
   useEffect(() => {
     dispatch(getData());
-  }, [dispatch]);
+    if (signIn) {
+      dispatch({ type: SIGN_IN });
+    }
+  }, [dispatch, signIn]);
 
   return (
     <>
@@ -48,6 +55,12 @@ const App = () => {
         </LoginProtectedRoute>
         <ProtectedRoute path="/profile" exact>
           <Profile />
+        </ProtectedRoute>
+        <ProtectedRoute path="/profile/orders" exact>
+          <Orders />
+        </ProtectedRoute>
+        <ProtectedRoute path="/profile/orders/:id" exact>
+          <Order />
         </ProtectedRoute>
         <LoginProtectedRoute path="/forgot-password" exact>
           <ForgotPassword />
