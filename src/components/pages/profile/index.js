@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { useSelector } from "react-redux";
 import styles from "./index.module.css";
-import { Input, PasswordInput } from "@ya.praktikum/react-developer-burger-ui-components";
+import { Input, PasswordInput, Button } from "@ya.praktikum/react-developer-burger-ui-components";
 import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
@@ -15,13 +15,18 @@ const Profile = () => {
   const dispatch = useDispatch();
   const history = useHistory();
   const { accessToken } = useSelector((state) => state.auth);
+  const [edit, setEdit] = useState(false);
 
   const getData = useCallback(async () => {
-    const result = await request(GET_USER_URL, null, "GET", accessToken);
-    if (result.success) {
-      return { ...result.user };
-    } else {
-      return { user: "", email: "" };
+    try {
+      const result = await request(GET_USER_URL, null, "GET", accessToken);
+      if (result.success) {
+        return { ...result.user };
+      } else {
+        return { name: "", email: "" };
+      }
+    } catch (e) {
+      console.log(e);
     }
   }, [accessToken]);
 
@@ -32,14 +37,31 @@ const Profile = () => {
     [accessToken]
   );
 
-  const changeName = async (name) => {
-    setName(name);
-    setData({ name });
+  const changeName = (e) => {
+    setName(e.target.value);
+    setEdit(true);
   };
 
-  const changeEmail = async (email) => {
-    setEmail(email);
-    setData({ email });
+  const changeEmail = (e) => {
+    setEmail(e.target.value);
+    setEdit(true);
+  };
+
+  const changeProfile = async (e) => {
+    e.preventDefault();
+    setData({ name: name, email: email });
+    setEdit(false);
+  };
+
+  const cancelChanges = async () => {
+    try {
+      const { name, email } = await getData();
+      setName(name);
+      setEmail(email);
+    } catch (e) {
+      console.log(e);
+    }
+    setEdit(false);
   };
 
   const handleSignOut = async () => {
@@ -54,9 +76,13 @@ const Profile = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const { name, email } = await getData();
-      setName(name);
-      setEmail(email);
+      try {
+        const { name, email } = await getData();
+        setName(name);
+        setEmail(email);
+      } catch (e) {
+        console.log(e);
+      }
     };
     fetchData();
   }, [getData]);
@@ -78,13 +104,30 @@ const Profile = () => {
             В этом разделе вы можете изменить свои персональные данные
           </div>
         </aside>
-        <main className={styles.inputs + " text_color_inactive"}>
-          <Input value={name} placeholder="Имя" icon="EditIcon" onChange={(e) => changeName(e.target.value)} />
-          <div className={styles.inputs + " mt-6 mb-6 text_color_inactive"}>
-            <Input value={email} placeholder="Логин" icon="EditIcon" onChange={(e) => changeEmail(e.target.value)} />
-          </div>
-          <PasswordInput value={password} name="password" onChange={(e) => setPassword(e.target.value)} />
-        </main>
+        <div className={styles.inputs}>
+          <form className={styles.inputs + " text_color_inactive"} onSubmit={changeProfile}>
+            <Input name="name" value={name} placeholder="Имя" icon="EditIcon" onChange={changeName} />
+            <div className={styles.inputs + " mt-6 mb-6 text_color_inactive"}>
+              <Input name="email" value={email} placeholder="Логин" icon="EditIcon" onChange={changeEmail} />
+            </div>
+            <PasswordInput
+              name="password"
+              value={password}
+              placeholder="Пароль"
+              onChange={(e) => setPassword(e.target.value)}
+            />
+            {edit && (
+              <div className="pt-6 pb-2">
+                <Button>Сохранить</Button>
+              </div>
+            )}
+          </form>
+          {edit && (
+            <Button type="secondary" onClick={cancelChanges}>
+              Отменить
+            </Button>
+          )}
+        </div>
       </div>
     </div>
   );

@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import styles from "./app.module.css";
+import styles from "./app.module.css"; //eslint-disable-line
 import AppHeader from "../app-header/app-header.jsx";
 import IngredientDetails from "../ingredient-details/ingredient-details";
 import Modal from "../modal/modal";

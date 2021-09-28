@@ -16,6 +16,13 @@
   width: 480px;
 }
 
+.inputs {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+}
+
 .info {
   color: rgba(133, 133, 173, 0.4);
 }
