@@ -1,0 +1,12 @@
+.container {
+  text-align: center;
+}
+
+.container a {
+  text-decoration: none;
+  color: #4c4cff;
+}
+
+.container a:hover {
+  color: #8585ad;
+}

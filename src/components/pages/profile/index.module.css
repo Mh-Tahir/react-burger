@@ -1,0 +1,36 @@
+.flex {
+  display: flex;
+}
+
+.aside {
+  width: 320px;
+}
+
+.link {
+  height: 64px;
+  line-height: 64px;
+  cursor: pointer;
+}
+
+.inputs > div > div {
+  width: 480px;
+}
+
+.inputs {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.info {
+  color: rgba(133, 133, 173, 0.4);
+}
+
+a {
+  text-decoration: none;
+}
+
+aside a:hover {
+  color: #ffffff;
+}

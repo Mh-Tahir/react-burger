@@ -8,6 +8,8 @@ export const ADD_ELEMENT = "ADD_ELEMENT";
 export const DELETE_ELEMENT = "DELETE_ELEMENT";
 export const DELETE_ORDER = "DELETE_ORDER";
 export const MOVE_ELEMENT = "MOVE_ELEMENT";
+export const SIGN_IN = "SIGN_IN";
+export const SIGN_OUT = "SIGN_OUT";
 
 export const getData = () => (dispatch) => {
   fetch(URL)
@@ -25,10 +27,10 @@ export const getData = () => (dispatch) => {
     .catch((e) => console.log(e.message));
 };
 
-export const getOrderData = (data) => (dispatch) => {
+export const getOrderData = (data, token) => (dispatch) => {
   fetch(ORDER_URL, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: { "Content-Type": "application/json", "Authorization": token },
     body: JSON.stringify({
       ingredients: data.map((e) => e._id),
     }),

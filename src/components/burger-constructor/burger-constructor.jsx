@@ -8,11 +8,14 @@ import { getOrderData } from "../../services/actions";
 import { BurgerConstructorElement } from "./burger-constructor-element";
 import { DELETE_ELEMENT, ADD_ELEMENT, MOVE_ELEMENT } from "../../services/actions";
 import update from "immutability-helper";
+import { useHistory } from "react-router-dom";
 
 const BurgerConstructor = ({ openWindow }) => {
   const dispatch = useDispatch();
   const elements = useSelector((store) => store.order.elements);
   const [cards, setCards] = useState(elements);
+  const history = useHistory();
+  const { signIn } = useSelector((state) => state.auth);
 
   useEffect(() => {
     setCards(elements);
@@ -20,7 +23,7 @@ const BurgerConstructor = ({ openWindow }) => {
 
   const formOrder = () => {
     openWindow();
-    dispatch(getOrderData(elements));
+    dispatch(getOrderData(elements, signIn));
   };
   const deleteElement = (e) => {
     dispatch({ type: DELETE_ELEMENT, id: e._id });
@@ -54,6 +57,13 @@ const BurgerConstructor = ({ openWindow }) => {
     },
     [cards]
   );
+  const handleOrder = () => {
+    if (signIn) {
+      formOrder();
+    } else {
+      history.push("/login");
+    }
+  };
   return (
     <section className={styles.container}>
       <div ref={dropTarget} className={styles.locked}>
@@ -113,7 +123,7 @@ const BurgerConstructor = ({ openWindow }) => {
           </p>
           <CurrencyIcon type="primary" />
         </div>
-        <Button type="primary" size="large" onClick={elements.find((e) => e.type === "bun") ? formOrder : null}>
+        <Button type="primary" size="large" onClick={elements.find((e) => e.type === "bun") ? handleOrder : null}>
           Оформить заказ
         </Button>
       </div>
