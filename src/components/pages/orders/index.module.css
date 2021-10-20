@@ -1,3 +1,10 @@
+.container {
+  display: flex;
+  justify-content: space-between;
+  max-width: 1280px;
+  margin: 0 auto;
+}
+
 .flex {
   display: flex;
 }
@@ -26,4 +33,10 @@ a {
 
 aside a:hover {
   color: #ffffff;
+}
+
+.orders {
+  max-height: 916px;
+  width: 100%;
+  overflow-x: hidden;
 }

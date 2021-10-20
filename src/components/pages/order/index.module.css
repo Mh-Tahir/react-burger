@@ -1,29 +1,44 @@
+.container {
+  width: 640px;
+  margin: auto;
+}
+
 .flex {
   display: flex;
+  align-items: center;
 }
 
-.aside {
-  width: 320px;
+.dflex {
+  composes: flex;
+  justify-content: space-between;
 }
 
-.link {
+.details {
+  max-height: 352px;
+  overflow-x: hidden;
+}
+
+.icon {
+  width: 64px;
   height: 64px;
-  line-height: 64px;
-  cursor: pointer;
+  border-radius: 100px;
+  position: relative;
+  overflow: hidden;
+  border: solid 2px #4c4cff;
+  box-sizing: border-box;
 }
 
-.inputs > div > div {
-  width: 480px;
+.image {
+  position: absolute;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  height: 100%;
+  object-fit: cover;
+  object-position: -30px 0;
+  background: #1c1c21;
 }
 
-.info {
-  color: rgba(133, 133, 173, 0.4);
-}
-
-a {
-  text-decoration: none;
-}
-
-aside a:hover {
-  color: #ffffff;
+.number {
+  text-align: center;
 }
