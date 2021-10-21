@@ -1,0 +1,95 @@
+.container {
+  color: #ffffff;
+  border-radius: 40px;
+  background: #1c1c21;
+  box-sizing: border-box;
+  cursor: pointer;
+}
+
+.wcontainer {
+  margin: auto;
+  max-width: 1280px;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+}
+
+.flex {
+  display: flex;
+  align-items: center;
+}
+
+.dflex {
+  composes: flex;
+  justify-content: space-between;
+}
+
+.sflex {
+  display: flex;
+}
+
+.wrflex {
+  display: flex;
+  flex-flow: row wrap;
+}
+
+.wflex {
+  composes: wrflex;
+  justify-content: space-between;
+}
+
+.cflex {
+  display: flex;
+  flex-flow: column wrap;
+}
+
+.image {
+  width: 64px;
+  height: 64px;
+  border-radius: 100px;
+  position: relative;
+  overflow: hidden;
+  border: solid 2px #4c4cff;
+  box-sizing: border-box;
+}
+
+.icon {
+  position: absolute;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  height: 100%;
+  object-fit: cover;
+  object-position: -30px 0;
+  background: #1c1c21;
+}
+
+.plusicon {
+  composes: icon;
+  opacity: 0.6;
+}
+
+.count {
+  position: absolute;
+  top: 25%;
+  left: 25%;
+  z-index: 2;
+}
+
+.orders {
+  width: 600px;
+  max-height: 912px;
+  overflow-x: hidden;
+}
+
+.data {
+  display: flex;
+  flex-direction: column;
+  min-width: 580px;
+}
+
+.ready {
+  color: #00cccc;
+}

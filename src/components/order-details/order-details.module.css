@@ -10,3 +10,19 @@
   justify-content: center;
   align-items: center;
 }
+
+.loading {
+  animation: loading 2s linear infinite;
+}
+
+@keyframes loading {
+  0% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
