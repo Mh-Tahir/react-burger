@@ -4,7 +4,6 @@ import { Tab } from "@ya.praktikum/react-developer-burger-ui-components";
 import { useSelector } from "../../services/hooks";
 import { BurgerIngredientsElement } from "./burger-ingredients-element";
 import { TIngredient } from "../../services/actions";
-import { RootState } from "../../services/types";
 
 type TProps = {
   openWindow: (el: TIngredient) => void;
@@ -12,31 +11,35 @@ type TProps = {
 
 const BurgerIngredients: FC<TProps> = ({ openWindow }) => {
   const [current, setCurrent] = useState<string>("bun");
-  const { ingredients } = useSelector((store: RootState) => store.ingredients);
+  const { ingredients } = useSelector((store) => store.ingredients);
 
   useEffect(() => {
-    const container: any = document.querySelector("[class^='burger-ingredients_ingredients']");
+    const container = document.querySelector("[class^='burger-ingredients_ingredients']");
     function scrollBurgerIngredients() {
-      const height = container.scrollTop;
-      if (height >= 0 && height < 294) {
-        setCurrent("bun");
-      } else if (height >= 294 && height < 788) {
-        setCurrent("sauce");
-      } else {
-        setCurrent("main");
+      if (container) {
+        const height = container?.scrollTop;
+        if (height >= 0 && height < 294) {
+          setCurrent("bun");
+        } else if (height >= 294 && height < 788) {
+          setCurrent("sauce");
+        } else {
+          setCurrent("main");
+        }
       }
     }
-    container.addEventListener("scroll", scrollBurgerIngredients);
+    container?.addEventListener("scroll", scrollBurgerIngredients);
     return () => {
-      container.removeEventListener("scroll", scrollBurgerIngredients);
+      container?.removeEventListener("scroll", scrollBurgerIngredients);
     };
   }, []);
 
-  const tabClick = (tab: any) => {
+  const tabClick = (tab: string) => {
     setCurrent(tab);
-    const container: any = document.querySelector("[class^='burger-ingredients_ingredients']");
+    const container = document.querySelector("[class^='burger-ingredients_ingredients']");
     const heights: any = { bun: 0, sauce: 295, main: 788 };
-    container.scrollTop = heights[`${tab}`];
+    if (container) {
+      container.scrollTop = heights[`${tab}`];
+    }
   };
 
   return (

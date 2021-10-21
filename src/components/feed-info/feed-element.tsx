@@ -5,7 +5,6 @@ import styles from "./feed.module.css";
 import { CurrencyIcon } from "@ya.praktikum/react-developer-burger-ui-components";
 import { getDate } from "../../services/utils";
 import { TIngredient, TOrder } from "../../services/actions";
-import { RootState } from "../../services/types";
 
 type TProps = {
   order: TOrder;
@@ -15,7 +14,7 @@ type TProps = {
 export const FeedElement: FC<TProps> = (props) => {
   const { order, status } = props;
   const location = useLocation();
-  const { ingredients } = useSelector((store: RootState) => store.ingredients);
+  const { ingredients } = useSelector((store) => store.ingredients);
   const [elements, setElements] = useState<TIngredient[]>([]);
   const [icons, setIcons] = useState<string[]>([]);
   const [count, setCount] = useState<number>(0);

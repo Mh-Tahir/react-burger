@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { FormEvent, useState } from "react";
 import styles from "./index.module.css";
 import { EmailInput, Button, PasswordInput } from "@ya.praktikum/react-developer-burger-ui-components";
 import { Link, useHistory } from "react-router-dom";
@@ -12,7 +12,7 @@ const Login = () => {
   const dispatch = useDispatch();
   const history = useHistory<any>();
 
-  const handleLogin = async (e: any) => {
+  const handleLogin = async (e: FormEvent) => {
     e.preventDefault();
     const result = await signIn(email, password);
     if (result.success) {

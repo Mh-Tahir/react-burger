@@ -2,14 +2,13 @@ import React, { FC } from "react";
 import styles from "./order-details.module.css";
 import { CheckMarkIcon } from "@ya.praktikum/react-developer-burger-ui-components";
 import { useSelector } from "../../services/hooks";
-import { RootState } from "../../services/types";
 
 type TProps = {
   onClose: (e: any) => void;
 };
 
 const OrderDetails: FC<TProps> = ({ onClose }) => {
-  const order = useSelector((store: RootState) => store.order);
+  const order = useSelector((store) => store.order);
   return (
     <div className={styles.container}>
       <div className={styles.flex} onClick={onClose}>

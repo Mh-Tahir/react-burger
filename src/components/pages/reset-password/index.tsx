@@ -1,4 +1,4 @@
-import React, { useState, FC } from "react";
+import React, { useState, FC, FormEvent } from "react";
 import styles from "./index.module.css";
 import { Input, Button, PasswordInput } from "@ya.praktikum/react-developer-burger-ui-components";
 import { Link, useHistory, Redirect } from "react-router-dom";
@@ -9,7 +9,7 @@ const ResetPassword: FC = () => {
   const [code, setCode] = useState<string>("");
   const history = useHistory();
 
-  const handlePassword = async (e: any) => {
+  const handlePassword = async (e: FormEvent) => {
     e.preventDefault();
     const result = await finalResetPassword(password, code);
     if (result.success) {

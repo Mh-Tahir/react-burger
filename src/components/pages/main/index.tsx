@@ -7,7 +7,7 @@ import Modal from "../../modal/modal";
 import { useDispatch } from "../../../services/hooks";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { DndProvider } from "react-dnd";
-import { getData } from "../../../services/actions";
+import { getData, TIngredient } from "../../../services/actions";
 import { DELETE_ORDER } from "../../../services/actions";
 import { useHistory } from "react-router-dom";
 
@@ -20,7 +20,7 @@ const Main: FC = () => {
     dispatch(getData());
   }, [dispatch]);
 
-  const openIngredientDetails = (e: any) => {
+  const openIngredientDetails = (e: TIngredient) => {
     history.push(`/ingredients/${e._id}`, { background: history.location });
   };
 

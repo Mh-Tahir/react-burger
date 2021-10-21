@@ -10,7 +10,6 @@ import update from "immutability-helper";
 import { useHistory } from "react-router-dom";
 import { getCookie } from "../../services/auth";
 import { TIngredient } from "../../services/actions";
-import { RootState } from "../../services/types";
 
 type TProps = {
   openWindow: () => void;
@@ -18,7 +17,7 @@ type TProps = {
 
 const BurgerConstructor: FC<TProps> = ({ openWindow }) => {
   const dispatch = useDispatch();
-  const elements = useSelector((store: RootState) => store.order.elements);
+  const elements = useSelector((store) => store.order.elements);
   const [cards, setCards] = useState<TIngredient[]>(elements);
   const history = useHistory();
   const signIn: string = getCookie("accessToken") || "";

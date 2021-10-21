@@ -1,8 +1,6 @@
-import { Dispatch } from "redux";
+import { AppThunk } from "../types";
 
-const URL = "https://norma.nomoreparties.space/api/ingredients" as const;
-const ORDER_URL = "https://norma.nomoreparties.space/api/orders" as const;
-
+export const URL = "https://norma.nomoreparties.space/api" as const;
 export const SET_INGREDIENTS = "SET_INGREDIENTS" as const;
 export const SET_ELEMENT = "SET_ELEMENT" as const;
 export const SET_ORDER_NUMBER = "SET_ORDER_NUMBER" as const;
@@ -160,13 +158,15 @@ export type TGetOrderAction = {
   order: TOrder;
 };
 
-export const getData = () => (dispatch: Dispatch<TSetIngredientsAction>) => {
-  fetch(URL)
-    .then((res) => {
-      if (res.ok) {
-        return res.json();
-      } else return Promise.reject(new Error("Ошибка"));
-    })
+const checkResponse = (res: Response) => {
+  if (res.ok) {
+    return res.json();
+  } else return Promise.reject(new Error("Ошибка"));
+};
+
+export const getData: AppThunk = () => (dispatch) => {
+  fetch(URL + "/ingredients")
+    .then((res) => checkResponse(res))
     .then((res) =>
       dispatch({
         type: SET_INGREDIENTS,
@@ -176,36 +176,27 @@ export const getData = () => (dispatch: Dispatch<TSetIngredientsAction>) => {
     .catch((e) => console.log(e.message));
 };
 
-export const getOrderDetails =
-  (data: Array<TIngredient>, token: string) => (dispatch: Dispatch<TSetOrderNumberAction>) => {
-    fetch(ORDER_URL, {
-      method: "POST",
-      headers: { "Content-Type": "application/json", Authorization: token },
-      body: JSON.stringify({
-        ingredients: data.map((e: TIngredient) => e._id),
-      }),
-    })
-      .then((res) => {
-        if (res.ok) {
-          return res.json();
-        } else return Promise.reject(new Error("Ошибка"));
+export const getOrderDetails: AppThunk = (data: Array<TIngredient>, token: string) => (dispatch) => {
+  fetch(URL + "/orders", {
+    method: "POST",
+    headers: { "Content-Type": "application/json", Authorization: token },
+    body: JSON.stringify({
+      ingredients: data.map((e: TIngredient) => e._id),
+    }),
+  })
+    .then((res) => checkResponse(res))
+    .then((res) =>
+      dispatch({
+        type: SET_ORDER_NUMBER,
+        number: res.order.number,
       })
-      .then((res) =>
-        dispatch({
-          type: SET_ORDER_NUMBER,
-          number: res.order.number,
-        })
-      )
-      .catch((e) => console.log(e.message));
-  };
+    )
+    .catch((e) => console.log(e.message));
+};
 
-export const getOrderData = (id: string) => (dispatch: Dispatch<TGetOrderAction>) => {
-  fetch(ORDER_URL + "/" + id)
-    .then((res) => {
-      if (res.ok) {
-        return res.json();
-      } else return Promise.reject(new Error("Ошибка"));
-    })
+export const getOrderData: AppThunk = (id: string) => (dispatch) => {
+  fetch(URL + "/orders/" + id)
+    .then((res) => checkResponse(res))
     .then((res) => {
       dispatch({
         type: GET_ORDER,

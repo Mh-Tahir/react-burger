@@ -1,10 +1,4 @@
-const REGISTER_URL = "https://norma.nomoreparties.space/api/auth/register" as const;
-const LOGIN_URL = "https://norma.nomoreparties.space/api/auth/login" as const;
-const LOGOUT_URL = "https://norma.nomoreparties.space/api/auth/logout" as const;
-const TOKEN_URL = "https://norma.nomoreparties.space/api/auth/token" as const;
-const RESET_URL = "https://norma.nomoreparties.space/api/password-reset" as const;
-const FINAL_RESET_URL = "https://norma.nomoreparties.space/api/password-reset/reset" as const;
-export const GET_USER_URL = "https://norma.nomoreparties.space/api/auth/user" as const;
+import { URL } from "../services/actions";
 
 export const request = async (
   url: string,
@@ -44,7 +38,7 @@ export const request = async (
     }
 
     if (result.message === "jwt expired") {
-      const result: any = await refreshToken();
+      const result: { success: boolean; accessToken: string } = await refreshToken();
 
       if (result.success) {
         params.headers.Authorization = result.accessToken;
@@ -59,16 +53,16 @@ export const request = async (
   }
 };
 
-export const resetPassword = async (email: string) => request(RESET_URL, { email }, "POST");
+export const resetPassword = async (email: string) => request(`${URL}/password-reset`, { email }, "POST");
 
 export const finalResetPassword = async (password: string, token: string) =>
-  request(FINAL_RESET_URL, { password, token }, "POST");
+  request(`${URL}/password-reset/reset`, { password, token }, "POST");
 
 export const registerUser = async (email: string, name: string, password: string) =>
-  request(REGISTER_URL, { email, name, password }, "POST");
+  request(`${URL}/auth/register`, { email, name, password }, "POST");
 
 export const signIn = async (email: string, password: string) => {
-  const result = await request(LOGIN_URL, { email, password }, "POST");
+  const result = await request(`${URL}/auth/login`, { email, password }, "POST");
   if (result.success) {
     setCookie("accessToken", result.accessToken);
     localStorage.setItem("refreshToken", result.refreshToken);
@@ -77,7 +71,7 @@ export const signIn = async (email: string, password: string) => {
 };
 
 export const signOut = async () => {
-  const result = await request(LOGOUT_URL, { token: localStorage.getItem("refreshToken") }, "POST");
+  const result = await request(`${URL}/auth/logout`, { token: localStorage.getItem("refreshToken") }, "POST");
   if (result.success) {
     deleteCookie("accessToken");
     localStorage.removeItem("refreshToken");
@@ -90,7 +84,7 @@ const refreshToken = async () => {
   if (!token) {
     return { sussess: false };
   }
-  const result = await request(TOKEN_URL, { token: token }, "POST");
+  const result = await request(`${URL}/auth/token`, { token: token }, "POST");
   if (result.success) {
     setCookie("accessToken", result.accessToken);
     localStorage.setItem("refreshToken", result.refreshToken);

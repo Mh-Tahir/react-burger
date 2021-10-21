@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import React, { FC, useEffect } from "react";
 import ReactDOM from "react-dom";
 import styles from "./modal.module.css";
 import { CloseIcon } from "@ya.praktikum/react-developer-burger-ui-components";
@@ -12,8 +12,8 @@ type TProps = {
 };
 
 const Modal: FC<TProps> = ({ children, onClose }) => {
-  React.useEffect(() => {
-    const handler = (e: any) => (e.code === "Escape" ? onClose() : null);
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => (e.code === "Escape" ? onClose() : null);
     window.addEventListener("keydown", handler);
     return () => {
       window.removeEventListener("keydown", handler);

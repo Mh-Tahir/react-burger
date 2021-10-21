@@ -4,7 +4,6 @@ import { Counter, CurrencyIcon } from "@ya.praktikum/react-developer-burger-ui-c
 import { useSelector } from "../../services/hooks";
 import { useDrag } from "react-dnd";
 import { TIngredient } from "../../services/actions";
-import { RootState } from "../../services/types";
 
 type TProps = {
   e: TIngredient;
@@ -12,7 +11,7 @@ type TProps = {
 };
 
 export const BurgerIngredientsElement = ({ e, openWindow }: TProps) => {
-  const elements = useSelector((store: RootState) => store.order.elements);
+  const elements = useSelector((store) => store.order.elements);
 
   const count = (e: TIngredient) => {
     return e.type === "bun"

@@ -5,14 +5,13 @@ import { useParams } from "react-router-dom";
 import { CurrencyIcon } from "@ya.praktikum/react-developer-burger-ui-components";
 import { getOrderData, TIngredient } from "../../../services/actions";
 import { getDate } from "../../../services/utils";
-import { RootState } from "../../../services/types";
 import { RootStateOrAny } from "react-redux";
 
 const Order: FC = () => {
   const dispatch = useDispatch();
   const [elements, setElements] = useState<TIngredient[]>([]);
   const [price, setPrice] = useState<number>(0);
-  const { ingredients } = useSelector((store: RootState) => store.ingredients);
+  const { ingredients } = useSelector((store) => store.ingredients);
   const { order } = useSelector((store: RootStateOrAny) => store.orderData);
   const { id } = useParams<{ id: string }>();
 

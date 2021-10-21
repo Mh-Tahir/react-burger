@@ -1,12 +1,13 @@
-import React, { useState, useEffect, useCallback, FC } from "react";
+import React, { useState, useEffect, useCallback, FC, FormEvent, ChangeEvent } from "react";
 import { useDispatch, useSelector } from "../../../services/hooks";
 import styles from "./index.module.css";
 import { Input, PasswordInput, Button } from "@ya.praktikum/react-developer-burger-ui-components";
 import { Link } from "react-router-dom";
 import { useHistory } from "react-router-dom";
-import { request, signOut, GET_USER_URL } from "../../../services/auth";
+import { request, signOut } from "../../../services/auth";
 import { SIGN_OUT } from "../../../services/actions";
 import { RootStateOrAny } from "react-redux";
+import { URL } from "../../../services/actions";
 
 const Profile: FC = () => {
   const [name, setName] = useState<string>("");
@@ -19,7 +20,7 @@ const Profile: FC = () => {
 
   const getData = useCallback(async () => {
     try {
-      const result = await request(GET_USER_URL, null, "GET", accessToken);
+      const result = await request(`${URL}/auth/user`, null, "GET", accessToken);
       if (result.success) {
         return { ...result.user };
       } else {
@@ -32,22 +33,22 @@ const Profile: FC = () => {
 
   const setData = useCallback(
     async (data) => {
-      return await request(GET_USER_URL, data, "PATCH", accessToken);
+      return await request(`${URL}/auth/user`, data, "PATCH", accessToken);
     },
     [accessToken]
   );
 
-  const changeName = (e: any) => {
+  const changeName = (e: ChangeEvent<HTMLInputElement>) => {
     setName(e.target.value);
     setEdit(true);
   };
 
-  const changeEmail = (e: any) => {
+  const changeEmail = (e: ChangeEvent<HTMLInputElement>) => {
     setEmail(e.target.value);
     setEdit(true);
   };
 
-  const changeProfile = async (e: any) => {
+  const changeProfile = async (e: FormEvent) => {
     e.preventDefault();
     setData({ name: name, email: email });
     setEdit(false);

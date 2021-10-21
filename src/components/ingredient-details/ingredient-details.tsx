@@ -3,14 +3,11 @@ import styles from "./ingredient-details.module.css";
 import { useSelector } from "../../services/hooks";
 import { useParams } from "react-router-dom";
 import { TIngredient } from "../../services/actions";
-import { RootState } from "../../services/types";
 
 const IngredientDetails: FC = () => {
   const { id } = useParams() as any;
-  let data = useSelector((store: RootState) => store.ingredients.element);
-  const dataId = useSelector((store: RootState) => store.ingredients.ingredients).find(
-    (e: TIngredient) => e._id === id
-  );
+  let data = useSelector((store) => store.ingredients.element);
+  const dataId = useSelector((store) => store.ingredients.ingredients).find((e: TIngredient) => e._id === id);
   data = dataId || data;
   return (
     <div className={styles.container + " pt-10 pr-10 pb-10 pl-10"}>

@@ -1,4 +1,4 @@
-import React, { useState, FC } from "react";
+import React, { useState, FC, FormEvent } from "react";
 import styles from "./index.module.css";
 import { Input, EmailInput, Button, PasswordInput } from "@ya.praktikum/react-developer-burger-ui-components";
 import { Link, useHistory } from "react-router-dom";
@@ -11,7 +11,7 @@ const Register: FC = () => {
 
   const history = useHistory();
 
-  const handleRegister = async (e: any) => {
+  const handleRegister = async (e: FormEvent) => {
     e.preventDefault();
     const result = await registerUser(email, password, name);
     if (result.success) {

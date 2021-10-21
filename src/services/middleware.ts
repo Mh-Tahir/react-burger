@@ -11,7 +11,7 @@ import { Dispatch } from "redux";
 
 export const socketMiddleware = () => {
   return (store: { dispatch: Dispatch<TConnectionActions> }) => {
-    let socket: any = null;
+    let socket: WebSocket | null = null;
 
     return (next: any) => (action: any) => {
       const { dispatch } = store;
@@ -21,21 +21,21 @@ export const socketMiddleware = () => {
         socket = new WebSocket(payload);
       }
       if (socket) {
-        socket.onopen = (event: WebSocketEventMap) => {
+        socket.onopen = (event: Event) => {
           dispatch({ type: WS_CONNECTION_SUCCESS, payload: event });
         };
 
-        socket.onerror = (event: WebSocketEventMap) => {
+        socket.onerror = (event: any) => {
           dispatch({ type: WS_CONNECTION_ERROR, payload: event });
         };
 
-        socket.onmessage = (event: WebSocketEventMap & { data: string }) => {
+        socket.onmessage = (event: MessageEvent & { data: string }) => {
           const { data } = event;
           const parsedData = JSON.parse(data);
           dispatch({ type: WS_GET_MESSAGE, payload: parsedData });
         };
 
-        socket.onclose = (event: WebSocketEventMap) => {
+        socket.onclose = (event: CloseEvent) => {
           dispatch({ type: WS_CONNECTION_CLOSED, payload: event });
         };
 
