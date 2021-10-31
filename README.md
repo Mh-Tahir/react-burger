@@ -1,4 +1,4 @@
-# [https://stellarburger.netlify.app]Stellar Burger
+# [Stellar Burger](https://stellarburger.netlify.app) Stellar Burger
 
 Stellar Burger is a web app where you can choose the burger ingredients and look at the ingredient details, 
 create orders and look at the order details, log in or register the account and edit your personal information, 
